@@ -15,6 +15,12 @@ function StatsDashboard({ stats, sessions }) {
   // Get the last 10 sessions for the chart
   const recentSessions = [...chartData].reverse().slice(0, 10).reverse();
   
+  // Calculate field goal percentage correctly (excluding free throws)
+  const fieldGoalPercentage = stats.fga > 0 
+    ? ((stats.fgm / stats.fga) * 100).toFixed(1) 
+    : 0;
+  
+  // Create a stat card component
   const StatCard = ({ title, value, subtitle }) => (
     <Paper elevation={2} className="stat-card">
       <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -31,39 +37,200 @@ function StatsDashboard({ stats, sessions }) {
     </Paper>
   );
 
+  // Create a detailed stat card component for percentages
+  const DetailedStatCard = ({ title, value, made, attempted }) => (
+    <Paper elevation={2} className="stat-card" sx={{ p: 2 }}>
+      <Typography variant="h6" color="textSecondary" gutterBottom>
+        {title}
+      </Typography>
+      <Typography variant="h4" component="div" color="primary">
+        {value}%
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        {made}/{attempted}
+      </Typography>
+    </Paper>
+  );
+
   return (
     <div>
       <Typography variant="h5" component="h2" gutterBottom>
         Your Basketball Stats Dashboard
       </Typography>
       
-      <Grid container spacing={3}>
+      {/* Main stats cards - First row */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
           <StatCard 
-            title="Shooting %" 
-            value={`${stats.percentage}%`} 
-            subtitle={`${stats.shotsMade}/${stats.shotsAttempted}`}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Total Shots Made" 
-            value={stats.shotsMade} 
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Total Attempts" 
-            value={stats.shotsAttempted} 
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Total Points" 
+            title="Career Points" 
             value={stats.totalPoints} 
+            subtitle={`from ${sessions.length} sessions`}
           />
         </Grid>
-        
+        <Grid item xs={12} sm={6} md={3}>
+          <DetailedStatCard 
+            title="Field Goal %" 
+            value={fieldGoalPercentage} 
+            made={stats.fgm}
+            attempted={stats.fga}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <DetailedStatCard 
+            title="Free Throw %" 
+            value={stats.ftPercentage} 
+            made={stats.ftm}
+            attempted={stats.fta}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <StatCard 
+            title="Games Played" 
+            value={sessions.length} 
+          />
+        </Grid>
+      </Grid>
+
+      {/* Detailed Stats - Second row */}
+      <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+        Detailed Shooting Stats
+      </Typography>
+      
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <DetailedStatCard 
+            title="2-Point %" 
+            value={stats.fg2Percentage} 
+            made={stats.fg2m}
+            attempted={stats.fg2a}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <DetailedStatCard 
+            title="3-Point %" 
+            value={stats.fg3Percentage} 
+            made={stats.fg3m}
+            attempted={stats.fg3a}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <DetailedStatCard 
+            title="Overall %" 
+            value={stats.shotsAttempted > 0 ? ((stats.shotsMade / stats.shotsAttempted) * 100).toFixed(1) : 0} 
+            made={stats.shotsMade}
+            attempted={stats.shotsAttempted}
+          />
+        </Grid>
+      </Grid>
+      
+      {/* Shooting breakdown table */}
+      <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+        Shooting Breakdown
+      </Typography>
+      
+      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+        <Grid container spacing={2}>
+          {/* Field Goals */}
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" fontWeight="bold" color="primary">Field Goals</Typography>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+          
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">Field Goal %:</Typography>
+            <Typography variant="body1" fontWeight="bold">{fieldGoalPercentage}%</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">FGM:</Typography>
+            <Typography variant="body1">{stats.fgm}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">FGA:</Typography>
+            <Typography variant="body1">{stats.fga}</Typography>
+          </Grid>
+          
+          {/* Free Throws */}
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="primary">Free Throws</Typography>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+          
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">Free Throw %:</Typography>
+            <Typography variant="body1" fontWeight="bold">{stats.ftPercentage}%</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">FTM:</Typography>
+            <Typography variant="body1">{stats.ftm}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">FTA:</Typography>
+            <Typography variant="body1">{stats.fta}</Typography>
+          </Grid>
+          
+          {/* 3-Pointers */}
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="primary">3-Point Shots</Typography>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+          
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">3-Point %:</Typography>
+            <Typography variant="body1" fontWeight="bold">{stats.fg3Percentage}%</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">3PM:</Typography>
+            <Typography variant="body1">{stats.fg3m}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">3PA:</Typography>
+            <Typography variant="body1">{stats.fg3a}</Typography>
+          </Grid>
+          
+          {/* 2-Pointers */}
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="primary">2-Point Shots</Typography>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+          
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">2-Point %:</Typography>
+            <Typography variant="body1" fontWeight="bold">{stats.fg2Percentage}%</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">2PM:</Typography>
+            <Typography variant="body1">{stats.fg2m}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">2PA:</Typography>
+            <Typography variant="body1">{stats.fg2a}</Typography>
+          </Grid>
+          
+          {/* Career Totals */}
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="primary">Career Totals</Typography>
+            <Divider sx={{ mb: 1 }} />
+          </Grid>
+          
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">Total Points:</Typography>
+            <Typography variant="body1" fontWeight="bold">{stats.totalPoints}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">Games:</Typography>
+            <Typography variant="body1">{sessions.length}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2" color="textSecondary">PPG:</Typography>
+            <Typography variant="body1" fontWeight="bold">
+              {sessions.length > 0 ? (stats.totalPoints / sessions.length).toFixed(1) : 0}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Paper>
+      
+      {/* Charts */}
+      <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
