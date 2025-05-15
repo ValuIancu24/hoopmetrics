@@ -3,7 +3,7 @@ import React from 'react';
 import { TableHead, TableRow, TableCell, TableSortLabel } from '@mui/material';
 
 /**
- * A reusable sortable table header component
+ * A reusable sortable table header component with sticky header support
  * 
  * @param {Array} columns - Array of column configuration objects
  * @param {string} orderBy - The current sort column
@@ -16,7 +16,18 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
   };
 
   return (
+
+    <TableHead 
+      sx={{ 
+        bgcolor: 'rgba(25, 118, 210, 0.05)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10
+      }}
+    >
+
     <TableHead sx={{ bgcolor: 'rgba(25, 118, 210, 0.05)' }}>
+
       <TableRow>
         {columns.map((column) => (
           <TableCell 
@@ -27,7 +38,27 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
             sx={{ 
               fontWeight: 600,
               color: orderBy === column.id ? 'primary.main' : 'inherit',
+
+              transition: 'all 0.2s ease',
+              backgroundColor: 'white',
+              position: 'sticky',
+              top: 0,
+              zIndex: 11,
+              padding: '10px 16px', // Match the padding in table cells
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                bottom: 0,
+                width: '100%',
+                borderBottom: '2px solid rgba(224, 224, 224, 1)'
+              }
+
               transition: 'all 0.2s ease'
+
             }}
           >
             {column.sortable !== false ? (
