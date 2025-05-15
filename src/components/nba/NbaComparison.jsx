@@ -1,4 +1,4 @@
-// src/components/nba/NbaComparison.jsx
+// src/components/nba/NbaComparison.jsx - Updated with enhanced styling
 import React, { useState, useEffect } from 'react';
 import { 
   Paper, 
@@ -53,7 +53,7 @@ function NbaComparison({
   // Get player rankings from stats hook
   const rankings = useStats(allPlayers, userFullStats);
   
-  // Sort players based on current sort settings - CALL the function with allPlayers
+  // Sort players based on current sort settings
   const sortedPlayers = React.useMemo(() => {
     // Make sure to call sortedItems as a function with allPlayers as argument
     return sortedItems(allPlayers);
@@ -86,7 +86,25 @@ function NbaComparison({
         NBA Comparison
       </Typography>
       
-      <Box sx={{ mb: 4 }}>
+      <Box 
+        sx={{ 
+          mb: 4,
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: -10,
+            right: -10,
+            width: 80,
+            height: 80,
+            backgroundImage: 'radial-gradient(circle, rgba(25, 118, 210, 0.1) 30%, transparent 30%)',
+            backgroundSize: '12px 12px',
+            zIndex: 0,
+            borderRadius: '50%',
+            opacity: 0.6
+          }
+        }}
+      >
         <Typography variant="h6" gutterBottom>
           Your NBA Rankings
         </Typography>
@@ -109,7 +127,13 @@ function NbaComparison({
         onRequestSort={handleRequestSort} 
       />
       
-      <Box sx={{ mt: 3, p: 2, bgcolor: 'rgba(0, 0, 0, 0.04)', borderRadius: 1 }}>
+      <Box sx={{ 
+        mt: 3, 
+        p: 2, 
+        bgcolor: 'rgba(0, 0, 0, 0.04)', 
+        borderRadius: 1,
+        border: '1px solid rgba(0, 0, 0, 0.08)'
+      }}>
         <Typography variant="body2" color="textSecondary">
           Note: NBA statistics sourced from Basketball Reference through 2025 season. 
           Click on any column header to sort by that stat.

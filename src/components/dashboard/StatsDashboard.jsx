@@ -1,56 +1,23 @@
+// src/components/dashboard/StatsDashboard.jsx - Updated with new styling
 import React from 'react';
 import { Grid, Paper, Typography, Box, Divider } from '@mui/material';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import StatCard from '../common/StatCard';
+import DetailedStatCard from '../common/DetailedStatCard';
+import { formatPercentage, formatNumber } from '../../utils/formatters';
+import { prepareChartData, getRecentSessions } from '../../utils/statCalculations';
 
 function StatsDashboard({ stats, sessions }) {
   // Prepare chart data
-  const chartData = sessions.map(session => ({
-    date: new Date(session.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    percentage: parseFloat(session.percentage),
-    shotsMade: session.shotsMade,
-    shotsAttempted: session.shotsAttempted,
-    shotType: session.shotType
-  }));
+  const chartData = prepareChartData(sessions);
 
   // Get the last 10 sessions for the chart
-  const recentSessions = [...chartData].reverse().slice(0, 10).reverse();
+  const recentSessions = getRecentSessions(chartData, 10);
   
   // Calculate field goal percentage correctly (excluding free throws)
   const fieldGoalPercentage = stats.fga > 0 
     ? ((stats.fgm / stats.fga) * 100).toFixed(1) 
     : 0;
-  
-  // Create a stat card component
-  const StatCard = ({ title, value, subtitle }) => (
-    <Paper elevation={2} className="stat-card">
-      <Typography variant="h6" color="textSecondary" gutterBottom>
-        {title}
-      </Typography>
-      <Typography variant="h4" component="div">
-        {value}
-      </Typography>
-      {subtitle && (
-        <Typography variant="body2" color="textSecondary">
-          {subtitle}
-        </Typography>
-      )}
-    </Paper>
-  );
-
-  // Create a detailed stat card component for percentages
-  const DetailedStatCard = ({ title, value, made, attempted }) => (
-    <Paper elevation={2} className="stat-card" sx={{ p: 2 }}>
-      <Typography variant="h6" color="textSecondary" gutterBottom>
-        {title}
-      </Typography>
-      <Typography variant="h4" component="div" color="primary">
-        {value}%
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
-        {made}/{attempted}
-      </Typography>
-    </Paper>
-  );
 
   return (
     <div>
@@ -63,7 +30,8 @@ function StatsDashboard({ stats, sessions }) {
         <Grid item xs={12} sm={6} md={3}>
           <StatCard 
             title="Career Points" 
-            value={stats.totalPoints} 
+            value={stats.totalPoints}
+            type="points"
             subtitle={`from ${sessions.length} sessions`}
           />
         </Grid>
@@ -73,6 +41,7 @@ function StatsDashboard({ stats, sessions }) {
             value={fieldGoalPercentage} 
             made={stats.fgm}
             attempted={stats.fga}
+            color="primary"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -81,6 +50,8 @@ function StatsDashboard({ stats, sessions }) {
             value={stats.ftPercentage} 
             made={stats.ftm}
             attempted={stats.fta}
+            color="#ff9800"
+            type="ft"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -103,6 +74,8 @@ function StatsDashboard({ stats, sessions }) {
             value={stats.fg2Percentage} 
             made={stats.fg2m}
             attempted={stats.fg2a}
+            color="primary"
+            type="fg2"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
@@ -111,6 +84,8 @@ function StatsDashboard({ stats, sessions }) {
             value={stats.fg3Percentage} 
             made={stats.fg3m}
             attempted={stats.fg3a}
+            color="secondary"
+            type="fg3"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
@@ -128,7 +103,7 @@ function StatsDashboard({ stats, sessions }) {
         Shooting Breakdown
       </Typography>
       
-      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: '12px' }}>
         <Grid container spacing={2}>
           {/* Field Goals */}
           <Grid item xs={12}>
@@ -232,7 +207,7 @@ function StatsDashboard({ stats, sessions }) {
       {/* Charts */}
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ p: 2 }}>
+          <Paper elevation={3} sx={{ p: 2, borderRadius: '12px' }}>
             <Typography variant="h6" gutterBottom>
               Shooting Percentage Trend
             </Typography>
@@ -249,14 +224,23 @@ function StatsDashboard({ stats, sessions }) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis domain={[0, 100]} />
-                  <Tooltip formatter={(value) => [`${value}%`, 'Shooting %']} />
+                  <Tooltip 
+                    formatter={(value) => [`${value}%`, 'Shooting %']}
+                    contentStyle={{ 
+                      backgroundColor: '#fff', 
+                      borderRadius: '8px',
+                      border: 'none',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                    }}
+                  />
                   <Legend />
                   <Line 
                     type="monotone" 
                     dataKey="percentage" 
                     name="Shooting %" 
-                    stroke="#8884d8" 
+                    stroke="#1976d2" 
                     activeDot={{ r: 8 }} 
+                    strokeWidth={2}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -271,7 +255,7 @@ function StatsDashboard({ stats, sessions }) {
         </Grid>
         
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ p: 2 }}>
+          <Paper elevation={3} sx={{ p: 2, borderRadius: '12px' }}>
             <Typography variant="h6" gutterBottom>
               Shot Distribution
             </Typography>
@@ -285,10 +269,17 @@ function StatsDashboard({ stats, sessions }) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#fff', 
+                      borderRadius: '8px',
+                      border: 'none',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                    }}
+                  />
                   <Legend />
-                  <Bar dataKey="shotsMade" name="Shots Made" fill="#4caf50" />
-                  <Bar dataKey="shotsAttempted" name="Shots Attempted" fill="#ff9800" />
+                  <Bar dataKey="shotsMade" name="Shots Made" fill="#4caf50" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="shotsAttempted" name="Shots Attempted" fill="#ff9800" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (

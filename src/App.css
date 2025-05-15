@@ -1,41 +1,264 @@
+/* Full App.css with Important Declarations */
+/* Base color variables */
+:root {
+  --primary-color: #1976d2;
+  --primary-light: #4791db;
+  --primary-dark: #115293;
+  --secondary-color: #f50057;
+  --secondary-light: #f73378;
+  --secondary-dark: #ab003c;
+  --background-color: #f5f7fa;
+  --card-color: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --info-color: #2196f3;
+  --chart-grid: rgba(0, 0, 0, 0.05);
+}
+
+/* Main background with subtle basketball pattern */
+body {
+  background-color: var(--background-color) !important;
+  background-image: 
+    radial-gradient(circle, rgba(25, 118, 210, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
+  background-size: 20px 20px, 50px 50px !important;
+  background-attachment: fixed !important;
+  color: #333 !important;
+}
+
+/* App container styling */
 .app-container {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+  max-width: 1200px !important;
 }
 
+/* Main header styling with basketball gradient */
 .header-paper {
-  padding: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  background: linear-gradient(to right, #1976d2, #2196f3);
-  color: white;
+  padding: 2.5rem 2rem !important;
+  margin-bottom: 2rem !important;
+  text-align: center !important;
+  background: linear-gradient(135deg, #1976d2, #2196f3, #0d47a1) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
+/* Basketball lines overlay for header */
+.header-paper::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
+  pointer-events: none !important;
+}
+
+/* Force white text for all typography in header */
+.header-paper .MuiTypography-root {
+  color: white !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Content papers styling */
 .form-paper, .comparison-paper {
-  padding: 2rem;
-  margin-bottom: 2rem;
+  padding: 2rem !important;
+  margin-bottom: 2rem !important;
+  border-radius: 12px !important;
+  box-shadow: var(--card-shadow) !important;
+  background-color: var(--card-color) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
+/* Hover effect for cards */
+.form-paper:hover, .comparison-paper:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Navigation tabs styling */
+.MuiTabs-root {
+  background-color: var(--card-color) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--card-shadow) !important;
+  margin-bottom: 2rem !important;
+}
+
+.MuiTab-root {
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 1rem 1.5rem !important;
+  min-width: 110px !important;
+  transition: all 0.2s ease !important;
+}
+
+.MuiTab-root:hover {
+  background-color: rgba(25, 118, 210, 0.05) !important;
+}
+
+.Mui-selected {
+  color: var(--primary-color) !important;
+}
+
+/* Stat cards styling */
 .stat-card {
-  padding: 1.5rem;
-  text-align: center;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 1.5rem !important;
+  text-align: center !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  background-color: var(--card-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: transform 0.2s ease !important;
 }
 
-/* Add loading spinner styles */
+.stat-card:hover {
+  transform: translateY(-3px) !important;
+}
+
+/* Tables styling */
+.MuiTableContainer-root {
+  border-radius: 8px !important;
+  box-shadow: var(--card-shadow) !important;
+  background-color: var(--card-color) !important;
+  overflow: hidden !important;
+}
+
+.MuiTableHead-root {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  font-weight: 600 !important;
+  color: var(--primary-dark) !important;
+}
+
+.MuiTableBody-root .MuiTableRow-root:hover {
+  background-color: rgba(25, 118, 210, 0.04) !important;
+}
+
+/* Charts styling */
+.recharts-wrapper {
+  font-family: inherit !important;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--chart-grid) !important;
+}
+
+.recharts-tooltip-wrapper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Loading spinner styling */
 .loading-spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border-left-color: #09f;
-  animation: spin 1s linear infinite;
+  border: 4px solid rgba(25, 118, 210, 0.1) !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  border-top-color: var(--primary-color) !important;
+  animation: spin 1s linear infinite !important;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .header-paper {
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .form-paper, .comparison-paper {
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .MuiTab-root {
+    padding: 0.75rem 1rem !important;
+    min-width: 80px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Special styling for specific card types */
+.stat-card[data-type="fg2"] {
+  border-left: 4px solid var(--primary-color) !important;
+}
+
+.stat-card[data-type="fg3"] {
+  border-left: 4px solid var(--secondary-color) !important;
+}
+
+.stat-card[data-type="ft"] {
+  border-left: 4px solid var(--warning-color) !important;
+}
+
+.stat-card[data-type="points"] {
+  border-left: 4px solid var(--success-color) !important;
+}
+
+/* Button styling */
+.MuiButton-containedPrimary {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary-color)) !important;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3) !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.MuiButton-containedPrimary:hover {
+  box-shadow: 0 6px 15px rgba(25, 118, 210, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Form inputs styling */
+.MuiTextField-root, .MuiFormControl-root {
+  margin-bottom: 1rem !important;
+}
+
+.MuiInputBase-root {
+  border-radius: 8px !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--primary-color) !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: var(--primary-color) !important;
+}
+
+/* Section headings */
+h5.MuiTypography-root, h6.MuiTypography-root {
+  position: relative !important;
+  display: inline-block !important;
+  margin-bottom: 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+h5.MuiTypography-root:after, h6.MuiTypography-root:after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -8px !important;
+  left: 0 !important;
+  width: 40px !important;
+  height: 3px !important;
+  background-color: var(--primary-color) !important;
+  border-radius: 3px !important;
 }
