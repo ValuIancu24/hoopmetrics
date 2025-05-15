@@ -16,6 +16,7 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
   };
 
   return (
+
     <TableHead 
       sx={{ 
         bgcolor: 'rgba(25, 118, 210, 0.05)',
@@ -24,6 +25,9 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
         zIndex: 10
       }}
     >
+
+    <TableHead sx={{ bgcolor: 'rgba(25, 118, 210, 0.05)' }}>
+
       <TableRow>
         {columns.map((column) => (
           <TableCell 
@@ -34,6 +38,7 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
             sx={{ 
               fontWeight: 600,
               color: orderBy === column.id ? 'primary.main' : 'inherit',
+
               transition: 'all 0.2s ease',
               backgroundColor: 'white',
               position: 'sticky',
@@ -51,6 +56,9 @@ function SortableTableHead({ columns, orderBy, order, onRequestSort }) {
                 width: '100%',
                 borderBottom: '2px solid rgba(224, 224, 224, 1)'
               }
+
+              transition: 'all 0.2s ease'
+
             }}
           >
             {column.sortable !== false ? (
