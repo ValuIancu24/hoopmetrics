@@ -1,4 +1,4 @@
-// src/components/common/DetailedStatCard.jsx
+// src/components/common/DetailedStatCard.jsx - Updated with data attributes
 import React from 'react';
 import { Paper, Typography } from '@mui/material';
 
@@ -11,6 +11,7 @@ import { Paper, Typography } from '@mui/material';
  * @param {number} made - Number of shots made
  * @param {number} attempted - Number of shots attempted
  * @param {string} color - Primary color for the value (default: 'primary')
+ * @param {string} type - Optional stat type for styling (fg2, fg3, ft, points)
  * @param {Object} sx - Additional styles to apply
  */
 function DetailedStatCard({ 
@@ -18,13 +19,15 @@ function DetailedStatCard({
   value, 
   made, 
   attempted, 
-  color = 'primary', 
+  color = 'primary',
+  type,
   sx = {} 
 }) {
   return (
     <Paper 
       elevation={2} 
       className="stat-card" 
+      data-type={type}
       sx={{ 
         p: 2,
         display: 'flex',

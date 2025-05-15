@@ -1,4 +1,4 @@
-// src/App.jsx - Updated to use StatsContext
+// Updated App.jsx with forced color styles
 import React, { useState } from 'react';
 import './App.css';
 import SessionForm from './components/sessions/SessionForm';
@@ -19,20 +19,89 @@ function AppContent() {
   return (
     <Container maxWidth="md" className="app-container">
       <Paper elevation={3} className="header-paper">
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          gutterBottom
+          sx={{ 
+            fontWeight: 600,
+            letterSpacing: '-0.5px',
+            mb: 1,
+            color: 'white !important' // Force white color
+          }}
+        >
           HoopMetrics
         </Typography>
-        <Typography variant="h6" color="textSecondary">
+        <Typography 
+          variant="h6" 
+          sx={{
+            fontWeight: 400,
+            letterSpacing: '0.2px',
+            color: 'white !important', // Force white color
+            opacity: 1 // Ensure visibility
+          }}
+        >
           Track Your Basketball Stats Like a Pro
         </Typography>
       </Paper>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-        <Tabs value={activeTab} onChange={handleTabChange} centered>
-          <Tab label="Dashboard" />
-          <Tab label="Add Session" />
-          <Tab label="History" />
-          <Tab label="NBA Comparison" />
+      <Box sx={{ 
+        borderBottom: 1, 
+        borderColor: 'divider', 
+        mb: 3,
+        bgcolor: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+        overflow: 'hidden'
+      }}>
+        <Tabs 
+          value={activeTab} 
+          onChange={handleTabChange} 
+          centered
+          variant="fullWidth"
+          sx={{
+            '& .MuiTabs-indicator': {
+              height: '3px',
+              borderRadius: '3px'
+            }
+          }}
+        >
+          <Tab 
+            label="Dashboard" 
+            sx={{ 
+              fontWeight: 600,
+              textTransform: 'none',
+              py: 1.5,
+              transition: 'all 0.2s ease'
+            }} 
+          />
+          <Tab 
+            label="Add Session" 
+            sx={{ 
+              fontWeight: 600,
+              textTransform: 'none',
+              py: 1.5,
+              transition: 'all 0.2s ease'
+            }} 
+          />
+          <Tab 
+            label="History" 
+            sx={{ 
+              fontWeight: 600,
+              textTransform: 'none',
+              py: 1.5,
+              transition: 'all 0.2s ease'
+            }} 
+          />
+          <Tab 
+            label="NBA Comparison" 
+            sx={{ 
+              fontWeight: 600,
+              textTransform: 'none',
+              py: 1.5,
+              transition: 'all 0.2s ease'
+            }} 
+          />
         </Tabs>
       </Box>
 
